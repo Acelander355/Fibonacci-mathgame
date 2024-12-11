@@ -1,0 +1,73 @@
+# Fibonacci Sequence Math Game
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fibonacci Sequence Math Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #timer {
+            font-size: 24px;
+            color: red;
+        }
+        #result {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fibonacci Sequence Math Game</h1>
+    <p>Can you guess the next number in the Fibonacci sequence?</p>
+    <div id="timer">Time left: <span id="time">10</span> seconds</div>
+    <div id="question"></div>
+    <input type="number" id="userInput" placeholder="Your answer">
+    <button onclick="checkAnswer()">Submit</button>
+    <div id="result"></div>
+
+    <script>
+        let fib = [0, 1];
+        let timeLeft = 10;
+        let currentQuestion;
+
+        function generateFibonacci() {
+            for (let i = 2; i < 10; i++) {
+                fib[i] = fib[i - 1] + fib[i - 2];
+            }
+            currentQuestion = fib[Math.floor(Math.random() * (fib.length - 2))];
+            document.getElementById('question').innerText = `What is the next number after ${currentQuestion}?`;
+            startTimer();
+        }
+
+        function startTimer() {
+            const timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('time').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    document.getElementById('result').innerText = "Time's up! The answer was " + (currentQuestion + fib[fib.indexOf(currentQuestion) + 1]) + ".";
+                }
+            }, 1000);
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseInt(document.getElementById('userInput').value);
+            const correctAnswer = currentQuestion + fib[fib.indexOf(currentQuestion) + 1];
+            if (userAnswer === correctAnswer) {
+                document.getElementById('result').innerText = "Correct! The next number is " + correctAnswer + ".";
+            } else {
+                document.getElementById('result').innerText = "Incorrect! The answer was " + correctAnswer + ".";
+            }
+            timeLeft = 0; // Stop the timer
+        }
+
+        window.onload = generateFibonacci;
+    </script>
+</body>
+</html>
